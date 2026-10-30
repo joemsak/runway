@@ -1,14 +1,24 @@
-module Runway
-  class Configuration
-    attr_accessor :cash, :debt
+class Runway
+  class Card
+    attr_accessor :name, :balance
+
+    def initialize
+      @name = "Unnamed Card"
+    end
   end
 
-  def self.configure
-    @config ||= Configuration.new
-    yield(@config)
+  def initialize(cash:)
+    @cash = cash
+    @cards = []
   end
 
-  def self.result
-    @config.cash - @config.debt
+  def add_card
+    card = Card.new
+    yield(card)
+    @cards << card
+  end
+
+  def result
+    @cash - @cards.sum(&:balance)
   end
 end
